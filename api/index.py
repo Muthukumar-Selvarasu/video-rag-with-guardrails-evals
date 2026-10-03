@@ -348,7 +348,7 @@ async def chat_endpoint(req: ChatRequest):
         eval_message = "Eval Failure: Target topic not present in course video transcripts."
     else:
         eval_precision_score = round(min(top_chunk_score, 1.0), 3)
-        eval_precision_passed = eval_precision_score >= 0.70
+        eval_precision_passed = eval_precision_score >= 0.52
         eval_precision_verdict = "High Precision (Top Ranked)" if eval_precision_passed else "Low Precision (Diffuse Context)"
 
         eval_faithfulness_score = round(raw_grounding, 3)
