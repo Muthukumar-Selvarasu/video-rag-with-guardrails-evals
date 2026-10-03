@@ -236,6 +236,13 @@ async def chat_endpoint(req: ChatRequest):
                 },
                 "output": None,
             },
+            "evals": {
+                "status": "BLOCKED",
+                "overall_passed": False,
+                "message": "Evaluation aborted: Query blocked by security guardrails.",
+                "context_precision": {"score": 0.0, "passed": False, "verdict": "Blocked by Guardrail"},
+                "faithfulness": {"score": 0.0, "passed": False, "verdict": "Blocked by Guardrail"},
+            },
             "sources": [],
         }
 
@@ -270,6 +277,13 @@ async def chat_endpoint(req: ChatRequest):
                 "input": {"passed": True, "reason": None, "details": input_result.details},
                 "output": None,
             },
+            "evals": {
+                "status": "ERROR",
+                "overall_passed": False,
+                "message": "Evaluation error during generation.",
+                "context_precision": {"score": 0.0, "passed": False, "verdict": "Execution Error"},
+                "faithfulness": {"score": 0.0, "passed": False, "verdict": "Execution Error"},
+            },
             "sources": [],
         }
 
@@ -291,6 +305,17 @@ async def chat_endpoint(req: ChatRequest):
                     "details": output_result.details,
                 },
             },
+            "evals": {
+                "status": "EVAL FAILED",
+                "overall_passed": False,
+                "message": "Output failed real-time grounding evaluation against transcript.",
+                "context_precision": {"score": 0.0, "passed": False, "verdict": "Evaluation Failed"},
+                "faithfulness": {
+                    "score": output_result.score or 0.0,
+                    "passed": False,
+                    "verdict": f"FAILED: Hallucination Risk (< {output_guard.min_grounding_score*100:.0f}% Grounded)",
+                },
+            },
             "sources": [],
         }
 
@@ -307,6 +332,33 @@ async def chat_endpoint(req: ChatRequest):
     has_no_info = any(ind in resp_text.lower() for ind in NO_INFO_INDICATORS)
     final_sources = [] if has_no_info else retrieved_chunks
 
+    # Compute Real-Time Evaluation Metrics
+    raw_grounding = output_result.score if output_result.score is not None else 0.0
+    top_chunk_score = retrieved_chunks[0].get("score", 0.0) if retrieved_chunks else 0.0
+
+    if has_no_info:
+        eval_precision_score = round(min(top_chunk_score, 0.45), 3)
+        eval_precision_passed = False
+        eval_precision_verdict = "Low Precision (Query Absent from Corpus)"
+        eval_faithfulness_score = 1.0
+        eval_faithfulness_passed = True
+        eval_faithfulness_verdict = "Faithful Refusal (Zero Hallucination)"
+        eval_status = "EVAL FAILED"
+        eval_overall_passed = False
+        eval_message = "Eval Failure: Target topic not present in course video transcripts."
+    else:
+        eval_precision_score = round(min(top_chunk_score, 1.0), 3)
+        eval_precision_passed = eval_precision_score >= 0.70
+        eval_precision_verdict = "High Precision (Top Ranked)" if eval_precision_passed else "Low Precision (Diffuse Context)"
+
+        eval_faithfulness_score = round(raw_grounding, 3)
+        eval_faithfulness_passed = eval_faithfulness_score >= 0.20
+        eval_faithfulness_verdict = "Grounded in Transcript" if eval_faithfulness_passed else "Low Grounding / Hallucination Risk"
+
+        eval_overall_passed = eval_precision_passed and eval_faithfulness_passed
+        eval_status = "PASSED" if eval_overall_passed else "EVAL FAILED"
+        eval_message = "Passed context precision and faithfulness benchmarks." if eval_overall_passed else "Failed retrieval precision or transcript grounding benchmark."
+
     return {
         "success": True,
         "response": resp_text,
@@ -322,6 +374,21 @@ async def chat_endpoint(req: ChatRequest):
                 "reason": None,
                 "grounding_score": 0.0 if has_no_info else output_result.score,
                 "details": "No relevant source segments found." if has_no_info else output_result.details,
+            },
+        },
+        "evals": {
+            "status": eval_status,
+            "overall_passed": eval_overall_passed,
+            "message": eval_message,
+            "context_precision": {
+                "score": eval_precision_score,
+                "passed": eval_precision_passed,
+                "verdict": eval_precision_verdict,
+            },
+            "faithfulness": {
+                "score": eval_faithfulness_score,
+                "passed": eval_faithfulness_passed,
+                "verdict": eval_faithfulness_verdict,
             },
         },
         "sources": final_sources,

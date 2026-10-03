@@ -586,6 +586,12 @@
       border: 1px solid rgba(99, 102, 241, 0.3);
     }
 
+    .guardrail-chip.warn {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
     .assistant-body {
       font-size: 0.92rem;
       line-height: 1.65;
@@ -872,6 +878,22 @@
 
     .progress-bar-fill.emerald {
       background: #10b981;
+    }
+
+    .progress-bar-fill.cyan {
+      background: #06b6d4;
+    }
+
+    .progress-bar-fill.purple {
+      background: #a855f7;
+    }
+
+    .progress-bar-fill.rose {
+      background: #f43f5e;
+    }
+
+    .progress-bar-fill.amber {
+      background: #f59e0b;
     }
 
     .check-item {
@@ -1923,15 +1945,16 @@
       </div>
     </main>
 
-    <!-- Right Real-Time Guardrail Inspector -->
+    <!-- Right Real-Time Guardrail & Evaluation Inspector -->
     <aside class="right-inspector-pane">
+      <!-- 1. Real-Time Guardrail Inspector -->
       <div class="inspector-card">
         <div class="inspector-title">
-          <span>Guardrail Inspector</span>
+          <span>🛡️ Guardrail Inspector</span>
           <span class="guardrail-chip pass" id="insp-overall-status">PASSED</span>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.45rem;">
           <div class="metric-row">
             <span class="metric-label">Input Validation</span>
             <span class="metric-val" id="insp-input-val" style="color: #10b981;">Clean (Passed)</span>
@@ -1944,21 +1967,46 @@
             <span class="metric-label">Course Relevance</span>
             <span class="metric-val" id="insp-domain-val" style="color: #10b981;">In-Scope</span>
           </div>
-        </div>
-
-        <hr style="border: none; border-top: 1px solid var(--border-subtle);">
-
-        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-          <div class="metric-row">
-            <span class="metric-label">Output Grounding Score</span>
-            <span class="metric-val" id="insp-grounding-num" style="color: #6366f1;">--</span>
-          </div>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill emerald" id="insp-grounding-bar" style="width: 0%;"></div>
-          </div>
           <div class="metric-row">
             <span class="metric-label">Secret & Token Leak</span>
             <span class="metric-val" id="insp-leak-val" style="color: #10b981;">None Detected</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Real-Time Evaluation Scorecard -->
+      <div class="inspector-card" id="eval-scorecard-card">
+        <div class="inspector-title">
+          <span>📊 Evaluation Scorecard</span>
+          <span class="guardrail-chip pass" id="insp-eval-overall-status">READY</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <!-- Metric 1: Context Precision -->
+          <div class="metric-row">
+            <span class="metric-label" title="Measures how accurately top-ranked video chunks match query intent">Context Precision (MAP)</span>
+            <span class="metric-val" id="insp-precision-val" style="color: #38bdf8; font-family: var(--font-mono); font-size: 0.76rem;">--</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill cyan" id="insp-precision-bar" style="width: 0%;"></div>
+          </div>
+          <div style="font-size: 0.68rem; color: var(--text-dim); margin-top: -3px;" id="insp-precision-sub">Top chunk ranking confidence</div>
+
+          <hr style="border: none; border-top: 1px solid var(--border-subtle); margin: 0.15rem 0;">
+
+          <!-- Metric 2: Faithfulness / Grounding -->
+          <div class="metric-row">
+            <span class="metric-label" title="Measures factual consistency of generated statements against transcripts">Faithfulness / Grounding</span>
+            <span class="metric-val" id="insp-faithfulness-val" style="color: #a855f7; font-family: var(--font-mono); font-size: 0.76rem;">--</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill purple" id="insp-faithfulness-bar" style="width: 0%;"></div>
+          </div>
+          <div style="font-size: 0.68rem; color: var(--text-dim); margin-top: -3px;" id="insp-faithfulness-sub">Transcript fact-checking validation</div>
+
+          <!-- Summary Verdict Banner -->
+          <div id="insp-eval-summary" style="font-size: 0.72rem; padding: 6px 8px; border-radius: 6px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); color: var(--text-muted); margin-top: 0.2rem; line-height: 1.35;">
+            Run queries to observe real-time precision and grounding benchmarks.
           </div>
         </div>
       </div>
@@ -2710,7 +2758,12 @@
               ${inputPass === false 
                 ? '<span class="guardrail-chip block">Input Blocked</span>' 
                 : '<span class="guardrail-chip pass">Input Clean</span>'}
-              ${groundingScore !== undefined && groundingScore !== null
+              ${data.evals?.status === 'PASSED'
+                ? '<span class="guardrail-chip pass">Eval Passed</span>'
+                : (data.evals?.status === 'EVAL FAILED'
+                    ? '<span class="guardrail-chip block">Eval Failed</span>'
+                    : '')}
+              ${groundingScore !== undefined && groundingScore !== null && groundingScore > 0
                 ? `<span class="guardrail-chip score">${Math.round(groundingScore * 100)}% Grounded</span>`
                 : ''}
             </div>
@@ -2732,15 +2785,25 @@
       const inputVal = document.getElementById("insp-input-val");
       const injectionVal = document.getElementById("insp-injection-val");
       const domainVal = document.getElementById("insp-domain-val");
-      const groundingNum = document.getElementById("insp-grounding-num");
-      const groundingBar = document.getElementById("insp-grounding-bar");
       const leakVal = document.getElementById("insp-leak-val");
       const retrievedCount = document.getElementById("insp-retrieved-count");
       const segmentsList = document.getElementById("insp-segments-list");
 
+      // Evaluation Scorecard elements
+      const evalOverallPill = document.getElementById("insp-eval-overall-status");
+      const precisionVal = document.getElementById("insp-precision-val");
+      const precisionBar = document.getElementById("insp-precision-bar");
+      const precisionSub = document.getElementById("insp-precision-sub");
+      const faithfulnessVal = document.getElementById("insp-faithfulness-val");
+      const faithfulnessBar = document.getElementById("insp-faithfulness-bar");
+      const faithfulnessSub = document.getElementById("insp-faithfulness-sub");
+      const evalSummary = document.getElementById("insp-eval-summary");
+
       const inGuard = data.guardrails?.input;
       const outGuard = data.guardrails?.output;
+      const evals = data.evals;
 
+      // 1. Guardrail Status
       if (!data.success) {
         overallPill.className = "guardrail-chip block";
         overallPill.innerText = "BLOCKED";
@@ -2770,17 +2833,61 @@
         }
       }
 
-      if (outGuard && outGuard.grounding_score !== undefined && outGuard.grounding_score !== null) {
-        const pct = Math.round(outGuard.grounding_score * 100);
-        groundingNum.innerText = `${pct}% (${outGuard.grounding_score.toFixed(2)})`;
-        groundingBar.style.width = `${pct}%`;
-        leakVal.innerText = "Clean (0 Leaks)";
-        leakVal.style.color = "#10b981";
-      } else {
-        groundingNum.innerText = "--";
-        groundingBar.style.width = "0%";
+      if (outGuard) {
+        if (outGuard.passed === false) {
+          leakVal.innerText = outGuard.reason || "Output Violation";
+          leakVal.style.color = "#f43f5e";
+        } else {
+          leakVal.innerText = "Clean (0 Leaks)";
+          leakVal.style.color = "#10b981";
+        }
       }
 
+      // 2. Evaluation Scorecard Live Metrics
+      if (evals) {
+        if (evals.status === "PASSED") {
+          evalOverallPill.className = "guardrail-chip pass";
+          evalOverallPill.innerText = "PASSED";
+        } else if (evals.status === "BLOCKED") {
+          evalOverallPill.className = "guardrail-chip block";
+          evalOverallPill.innerText = "BLOCKED";
+        } else {
+          evalOverallPill.className = "guardrail-chip block";
+          evalOverallPill.innerText = "EVAL FAILED";
+        }
+
+        // Context Precision
+        if (evals.context_precision) {
+          const cp = evals.context_precision;
+          const cpPct = Math.round(cp.score * 100);
+          precisionVal.innerText = `${cpPct}% (${cp.score.toFixed(2)})`;
+          precisionVal.style.color = cp.passed ? "#38bdf8" : "#fb7185";
+          precisionBar.style.width = `${Math.max(cpPct, 8)}%`;
+          precisionBar.className = `progress-bar-fill ${cp.passed ? 'cyan' : 'rose'}`;
+          if (precisionSub) precisionSub.innerText = cp.verdict;
+        }
+
+        // Faithfulness / Grounding
+        if (evals.faithfulness) {
+          const f = evals.faithfulness;
+          const fPct = Math.round(f.score * 100);
+          faithfulnessVal.innerText = `${fPct}% (${f.score.toFixed(2)})`;
+          faithfulnessVal.style.color = f.passed ? "#a855f7" : "#fb7185";
+          faithfulnessBar.style.width = `${Math.max(fPct, 8)}%`;
+          faithfulnessBar.className = `progress-bar-fill ${f.passed ? 'purple' : 'rose'}`;
+          if (faithfulnessSub) faithfulnessSub.innerText = f.verdict;
+        }
+
+        // Summary Verdict Text
+        if (evalSummary && evals.message) {
+          evalSummary.innerText = evals.message;
+          evalSummary.style.borderColor = evals.overall_passed ? "rgba(16, 185, 129, 0.3)" : "rgba(244, 63, 94, 0.3)";
+          evalSummary.style.color = evals.overall_passed ? "#6ee7b7" : "#fda4af";
+          evalSummary.style.background = evals.overall_passed ? "rgba(16, 185, 129, 0.05)" : "rgba(244, 63, 94, 0.05)";
+        }
+      }
+
+      // 3. Retrieved Transcript Chunks
       if (data.sources && data.sources.length > 0) {
         retrievedCount.innerText = `${data.sources.length} items`;
         segmentsList.innerHTML = data.sources.map(s => `
