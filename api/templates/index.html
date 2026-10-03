@@ -927,6 +927,329 @@
       0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
       40% { opacity: 1; transform: scale(1.2); }
     }
+
+    /* Architecture & How It Works Modal Styles */
+    .arch-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.38rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: var(--font-body);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(139, 92, 246, 0.28));
+      border: 1px solid rgba(129, 140, 248, 0.45);
+      color: #e0e7ff;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.15);
+      white-space: nowrap;
+    }
+
+    .arch-nav-btn:hover {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.38), rgba(139, 92, 246, 0.45));
+      border-color: #a5b4fc;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 0 24px rgba(99, 102, 241, 0.35);
+    }
+
+    .arch-modal-card {
+      background: #090d16;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: var(--radius-md);
+      width: 100%;
+      max-width: 1060px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(99, 102, 241, 0.18);
+      animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .arch-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 1rem;
+    }
+
+    .arch-tabs-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0.4rem 0 0.85rem 0;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .arch-tab-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      padding: 0.55rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: var(--font-body);
+      line-height: 1.3;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .arch-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .arch-tab-btn.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.35));
+      border-color: rgba(129, 140, 248, 0.55);
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.25);
+    }
+
+    .arch-pane {
+      display: none;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .arch-pane.active {
+      display: flex;
+    }
+
+    .arch-grid-canvas {
+      background: rgba(13, 18, 30, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      position: relative;
+    }
+
+    @media (max-width: 900px) {
+      .arch-grid-canvas {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .arch-subsystem-box {
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      border: 1px solid transparent;
+      position: relative;
+      background: rgba(18, 24, 40, 0.6);
+      backdrop-filter: blur(8px);
+    }
+
+    .arch-subsystem-box.agent-wf {
+      border-color: rgba(244, 63, 94, 0.45);
+      background: linear-gradient(180deg, rgba(244, 63, 94, 0.09) 0%, rgba(18, 24, 40, 0.75) 100%);
+    }
+
+    .arch-subsystem-box.safeguards {
+      border-color: rgba(245, 158, 11, 0.45);
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.09) 0%, rgba(18, 24, 40, 0.75) 100%);
+    }
+
+    .arch-subsystem-box.knowledge {
+      border-color: rgba(16, 185, 129, 0.45);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.09) 0%, rgba(18, 24, 40, 0.75) 100%);
+    }
+
+    .arch-subsystem-box.ux-box {
+      border-color: rgba(56, 189, 248, 0.45);
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.09) 0%, rgba(18, 24, 40, 0.75) 100%);
+    }
+
+    .arch-box-title {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      letter-spacing: -0.01em;
+    }
+
+    .arch-node-item {
+      background: rgba(10, 14, 24, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 6px;
+      padding: 0.5rem 0.65rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.15s ease;
+    }
+
+    .arch-node-item:hover {
+      border-color: var(--primary);
+      background: rgba(20, 28, 48, 0.95);
+      transform: translateX(2px);
+    }
+
+    .arch-node-name {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .arch-node-file {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: #94a3b8;
+    }
+
+    .flow-steps-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .flow-step-card {
+      background: rgba(15, 21, 37, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.95rem 1.15rem;
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 1rem;
+      align-items: start;
+      transition: border-color 0.2s;
+    }
+
+    .flow-step-card:hover {
+      border-color: var(--border-accent);
+      background: rgba(20, 28, 50, 0.8);
+    }
+
+    .flow-step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #a5b4fc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+      flex-shrink: 0;
+    }
+
+    .flow-step-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .flow-step-title {
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .flow-step-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .flow-step-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .flow-badge {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+    }
+
+    .arch-modal-footer {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .arch-close-action-btn {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #c7d2fe;
+      padding: 0.45rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .arch-close-action-btn:hover {
+      background: rgba(99, 102, 241, 0.3);
+      color: #fff;
+    }
+
+    .gitdiagram-external-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #a5b4fc;
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: var(--radius-sm);
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      transition: all 0.15s ease;
+    }
+
+    .gitdiagram-external-link:hover {
+      color: #fff;
+      background: rgba(99, 102, 241, 0.25);
+      border-color: #818cf8;
+    }
   </style>
 </head>
 <body>
@@ -944,6 +1267,10 @@
     </div>
 
     <div class="header-status">
+      <button class="arch-nav-btn" onclick="openArchModal()" title="View System Architecture & Execution Flow">
+        <span>🏛️</span>
+        <span>Architecture & How It Works</span>
+      </button>
       <div class="pill-badge" id="active-guardrail-pill">
         <span class="pill-dot"></span>
         <span>Guardrails Active (Injection & Grounding)</span>
@@ -1119,6 +1446,437 @@
       </div>
     </aside>
 
+  </div>
+
+  <!-- Architecture & How It Works Modal -->
+  <div class="modal-overlay" id="arch-modal">
+    <div class="arch-modal-card">
+      
+      <!-- Modal Header -->
+      <div class="arch-modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 34px; height: 34px; border-radius: 8px; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; font-size: 1.15rem; box-shadow: 0 4px 12px rgba(99,102,241,0.35);">🏛️</div>
+          <div>
+            <div class="modal-title" style="font-size: 1.15rem; display: flex; align-items: center; gap: 0.65rem;">
+              System Architecture & How It Works
+              <span class="brand-tag" style="font-size: 0.65rem;">GitDiagram Aligned</span>
+              <span class="brand-tag" style="font-size: 0.65rem; background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #34d399;">Vercel Serverless</span>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 2px;">
+              Component topology, runtime guardrail lifecycle, and serverless vector RAG
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <a href="https://gitdiagram.com/muthukumar-selvarasu/video-rag-with-guardrails-evals" target="_blank" rel="noopener noreferrer" class="gitdiagram-external-link" title="Open full interactive AST graph in GitDiagram">
+            <span>Open on GitDiagram</span> ↗
+          </a>
+          <button class="close-btn" onclick="closeArchModal()">&times;</button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="arch-tabs-nav">
+        <button class="arch-tab-btn active" data-arch-tab="tab-components" onclick="switchArchTab('tab-components')">
+          🗺️ Component Map (GitDiagram)
+        </button>
+        <button class="arch-tab-btn" data-arch-tab="tab-flow" onclick="switchArchTab('tab-flow')">
+          ⚡ How It Works (Step-by-Step Flow)
+        </button>
+        <button class="arch-tab-btn" data-arch-tab="tab-guardrails" onclick="switchArchTab('tab-guardrails')">
+          🛡️ The Bouncer (Guardrails)
+        </button>
+        <button class="arch-tab-btn" data-arch-tab="tab-ingestion" onclick="switchArchTab('tab-ingestion')">
+          🔍 Ingestion & Hybrid Search
+        </button>
+      </div>
+
+      <!-- TAB 1: Component Map (GitDiagram Layout) -->
+      <div class="arch-pane active" id="tab-components">
+        <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between;">
+          <span>Visual architecture map corresponding to repository files and detected AST dependencies:</span>
+          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #818cf8;">4 Subsystems • 12 Core Modules</span>
+        </div>
+
+        <div class="arch-grid-canvas">
+          <!-- 1. UX & Client (Left) -->
+          <div class="arch-subsystem-box ux-box">
+            <div class="arch-box-title" style="color: #38bdf8;">
+              <span>👤 User Experience</span>
+              <span class="flow-badge" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">Client</span>
+            </div>
+            <div class="arch-node-item">
+              <div class="arch-node-name">Web Interface (SPA)</div>
+              <div class="arch-node-file">templates/index.html</div>
+            </div>
+            <div class="arch-node-item">
+              <div class="arch-node-name">Synchronized Video Player</div>
+              <div class="arch-node-file">YouTube iframe & Timestamps</div>
+            </div>
+            <div class="arch-node-item">
+              <div class="arch-node-name">Guardrail Inspector Badge</div>
+              <div class="arch-node-file">Real-time Safety Feed</div>
+            </div>
+            <div style="font-size: 0.72rem; color: #94a3b8; font-style: italic; margin-top: auto; padding: 4px; background: rgba(0,0,0,0.25); border-radius: 4px;">
+              Sends queries, displays answers, jumps video to spoken second.
+            </div>
+          </div>
+
+          <!-- 2. Query & Safeguards (Center) -->
+          <div class="arch-subsystem-box safeguards">
+            <div class="arch-box-title" style="color: #fbbf24;">
+              <span>🛡️ Query & Safeguards</span>
+              <span class="flow-badge" style="color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);">FastAPI</span>
+            </div>
+            <div class="arch-node-item">
+              <div class="arch-node-name">FastAPI Endpoints</div>
+              <div class="arch-node-file">api/index.py (/api/chat, /search)</div>
+            </div>
+            <div class="arch-node-item">
+              <div class="arch-node-name">Guardrail Router</div>
+              <div class="arch-node-file">src/guardrails/router.py</div>
+            </div>
+            <div class="arch-node-item">
+              <div class="arch-node-name">Input Checks (Injection & Scope)</div>
+              <div class="arch-node-file">src/guardrails/input_guard.py</div>
+            </div>
+            <div class="arch-node-item">
+              <div class="arch-node-name">Output Checks (Leak & Grounding)</div>
+              <div class="arch-node-file">src/guardrails/output_guard.py</div>
+            </div>
+            <div class="arch-node-item">
+              <div class="arch-node-name">Answer Synthesis Orchestrator</div>
+              <div class="arch-node-file">api/index.py ↔ Gemini 2.0 Flash</div>
+            </div>
+          </div>
+
+          <!-- 3. Agent & External (Right) -->
+          <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+            <div class="arch-subsystem-box agent-wf">
+              <div class="arch-box-title" style="color: #fb7185;">
+                <span>🤖 Agent Workflow</span>
+                <span class="flow-badge" style="color: #fb7185; border-color: rgba(244, 63, 94, 0.3);">ReAct</span>
+              </div>
+              <div class="arch-node-item">
+                <div class="arch-node-name">Agent Entry Point</div>
+                <div class="arch-node-file">src/agent/main.py</div>
+              </div>
+              <div class="arch-node-item">
+                <div class="arch-node-name">Transcript Search Tool</div>
+                <div class="arch-node-file">src/agent/tools.py</div>
+              </div>
+            </div>
+
+            <div class="arch-subsystem-box" style="border-color: rgba(168, 85, 247, 0.45); background: linear-gradient(180deg, rgba(168, 85, 247, 0.09) 0%, rgba(18, 24, 40, 0.75) 100%);">
+              <div class="arch-box-title" style="color: #c084fc;">
+                <span>✨ LLM Provider</span>
+                <span class="flow-badge" style="color: #c084fc; border-color: rgba(168, 85, 247, 0.3);">Cloud</span>
+              </div>
+              <div class="arch-node-item">
+                <div class="arch-node-name">Gemini 2.0 Flash / Vertex AI</div>
+                <div class="arch-node-file">Strict Video Grounded Persona</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Transcript Knowledge (Full Bottom Span) -->
+          <div class="arch-subsystem-box knowledge" style="grid-column: 1 / -1;">
+            <div class="arch-box-title" style="color: #34d399;">
+              <span>📚 Transcript Knowledge & Vector Search</span>
+              <span class="flow-badge" style="color: #34d399; border-color: rgba(16, 185, 129, 0.3);">In-Memory RAG</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.65rem;">
+              <div class="arch-node-item">
+                <div class="arch-node-name">Ingestion Pipeline</div>
+                <div class="arch-node-file">src/ingestion/pipeline.py</div>
+              </div>
+              <div class="arch-node-item">
+                <div class="arch-node-name">Transcript Parsing</div>
+                <div class="arch-node-file">src/ingestion/transcriber.py</div>
+              </div>
+              <div class="arch-node-item">
+                <div class="arch-node-name">Timestamp Chunking</div>
+                <div class="arch-node-file">src/ingestion/chunker.py</div>
+              </div>
+              <div class="arch-node-item">
+                <div class="arch-node-name">Preindex Generation</div>
+                <div class="arch-node-file">src/ingestion/preindexer.py</div>
+              </div>
+              <div class="arch-node-item">
+                <div class="arch-node-name">Hybrid Transcript Search</div>
+                <div class="arch-node-file">src/ingestion/search.py</div>
+              </div>
+              <div class="arch-node-item" style="border-color: rgba(16, 185, 129, 0.4);">
+                <div class="arch-node-name">Preindexed Embeddings Store</div>
+                <div class="arch-node-file">data/preindexed_embeddings.json (691 Chunks • 768-D)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Subsystem Descriptions -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-top: 0.5rem;">
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 0.75rem; font-size: 0.76rem;">
+            <div style="font-weight: 700; color: #38bdf8; margin-bottom: 0.25rem;">1. User Experience</div>
+            <div style="color: var(--text-dim); line-height: 1.4;">Pure client SPA with preset adversarial scenarios, interactive timestamp seeking, and real-time guardrail inspector diagnostics.</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 0.75rem; font-size: 0.76rem;">
+            <div style="font-weight: 700; color: #fbbf24; margin-bottom: 0.25rem;">2. Query & Safeguards</div>
+            <div style="color: var(--text-dim); line-height: 1.4;">Two-phase guardrail gateway: pre-execution prompt injection defense, and post-execution token leak & grounding checks before returning answers.</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 0.75rem; font-size: 0.76rem;">
+            <div style="font-weight: 700; color: #34d399; margin-bottom: 0.25rem;">3. Transcript Knowledge</div>
+            <div style="color: var(--text-dim); line-height: 1.4;">Zero external database vector search. 691 precomputed 768-D embeddings reside directly in memory for instant ~15ms cosine similarity ranking.</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 0.75rem; font-size: 0.76rem;">
+            <div style="font-weight: 700; color: #fb7185; margin-bottom: 0.25rem;">4. Agent Workflow</div>
+            <div style="color: var(--text-dim); line-height: 1.4;">ReAct agent tool integration wrapping the search pipeline in guarded routing with fallback strategies and LLM orchestration.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: How It Works (Step-by-Step Flow) -->
+      <div class="arch-pane" id="tab-flow">
+        <div style="font-size: 0.78rem; color: var(--text-muted);">
+          The journey of a user prompt from input to verified answer with synchronized video seeking:
+        </div>
+
+        <div class="flow-steps-grid">
+          
+          <div class="flow-step-card">
+            <div class="flow-step-num">1</div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">
+                <span>User Enters Query or Selects Adversarial Test Scenario</span>
+                <span class="flow-badge">Client Layer</span>
+              </div>
+              <div class="flow-step-desc">
+                The student asks a question about Claude Code (e.g. <i>"What is CLAUDE.md and how does it configure memory?"</i>) or clicks one of the sidebar test scenarios (Prompt Injection, Off-topic query, Hallucination trap).
+              </div>
+              <div class="flow-step-meta">
+                <span class="flow-badge">SPA</span>
+                <span class="flow-badge">POST /api/chat</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-step-card">
+            <div class="flow-step-num" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #f59e0b;">2</div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">
+                <span>Pre-Execution Screening: InputGuardrail</span>
+                <span class="flow-badge" style="color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);">src/guardrails/input_guard.py</span>
+              </div>
+              <div class="flow-step-desc">
+                Before calling any LLM API, the query passes through <code>GuardrailRouter</code>:
+                <ul style="margin: 0.3rem 0 0 1.2rem; font-size: 0.8rem; line-height: 1.4;">
+                  <li><b>Prompt Injection Check:</b> Scans for override commands (<i>"ignore previous instructions"</i>, <i>"DAN"</i>, system prompt extraction).</li>
+                  <li><b>Domain Relevance Check:</b> Matches against course vocabulary (Claude Code, CLI, subagents, tools, git).</li>
+                </ul>
+                <b>If blocked:</b> Instantly returns a polite educational refusal in &lt; 5ms with $0 LLM cost!
+              </div>
+              <div class="flow-step-meta">
+                <span class="flow-badge">0ms LLM Latency</span>
+                <span class="flow-badge">$0 Cost Protection</span>
+                <span class="flow-badge">100% Injection Block</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-step-card">
+            <div class="flow-step-num" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4); color: #10b981;">3</div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">
+                <span>Serverless In-Memory Hybrid Retrieval</span>
+                <span class="flow-badge" style="color: #34d399; border-color: rgba(16, 185, 129, 0.3);">src/ingestion/search.py</span>
+              </div>
+              <div class="flow-step-desc">
+                Safe queries are passed to <code>ServerlessVectorSearch</code>:
+                <ul style="margin: 0.3rem 0 0 1.2rem; font-size: 0.8rem; line-height: 1.4;">
+                  <li>Generates 768-D query embedding via Gemini <code>text-embedding-004</code>.</li>
+                  <li>Calculates Cosine Similarity across <b>691 precomputed chunks</b> in memory.</li>
+                  <li>Combines vector scores with BM25-style lexical keyword boosting.</li>
+                </ul>
+                Retrieves the top-3 most precise video cues with exact start/end timestamps in ~15ms.
+              </div>
+              <div class="flow-step-meta">
+                <span class="flow-badge">In-Memory 768-D JSON</span>
+                <span class="flow-badge">Cosine + Keyword Hybrid</span>
+                <span class="flow-badge">~15ms Search</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-step-card">
+            <div class="flow-step-num" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #c084fc;">4</div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">
+                <span>Grounded Answer Synthesis</span>
+                <span class="flow-badge" style="color: #c084fc; border-color: rgba(168, 85, 247, 0.3);">Gemini 2.0 Flash</span>
+              </div>
+              <div class="flow-step-desc">
+                FastAPI formats a strict prompt injecting only the retrieved transcript cues. The system persona strictly commands the model: <i>"Answer ONLY based on the provided video transcripts. If the video does not state it, state that the lectures do not cover it."</i>
+              </div>
+              <div class="flow-step-meta">
+                <span class="flow-badge">Strict Grounding Persona</span>
+                <span class="flow-badge">Embedded Timestamps</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-step-card">
+            <div class="flow-step-num" style="background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.4); color: #f43f5e;">5</div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">
+                <span>Post-Execution Verification: OutputGuardrail</span>
+                <span class="flow-badge" style="color: #fb7185; border-color: rgba(244, 63, 94, 0.3);">src/guardrails/output_guard.py</span>
+              </div>
+              <div class="flow-step-desc">
+                The synthesized candidate answer is screened before reaching the user:
+                <ul style="margin: 0.3rem 0 0 1.2rem; font-size: 0.8rem; line-height: 1.4;">
+                  <li><b>Secret Leak Detection:</b> Verifies no API keys, internal system prompts, or credentials leaked.</li>
+                  <li><b>Grounding & Faithfulness Score:</b> Calculates lexical Jaccard overlap between answer tokens and source cues. Must meet threshold (&ge; 0.15).</li>
+                </ul>
+                If ungrounded or hallucinated, the response is replaced with a safe fallback notice.
+              </div>
+              <div class="flow-step-meta">
+                <span class="flow-badge">Jaccard Score &ge; 0.15</span>
+                <span class="flow-badge">Token Leak Filter</span>
+                <span class="flow-badge">Hallucination Defense</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-step-card">
+            <div class="flow-step-num" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">6</div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">
+                <span>Synchronized Video Playback & Guardrail Inspector</span>
+                <span class="flow-badge" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">Interactive UI</span>
+              </div>
+              <div class="flow-step-desc">
+                The verified response renders with clickable timestamp tags (e.g. <code>▶ 12:45</code>). Clicking any timestamp opens the synchronized YouTube video player seeking directly to the exact spoken second! The right inspector pane updates with real-time guardrail metrics.
+              </div>
+              <div class="flow-step-meta">
+                <span class="flow-badge">YouTube Sync</span>
+                <span class="flow-badge">Click-to-Seek</span>
+                <span class="flow-badge">Live Diagnostics</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 3: The Bouncer (Guardrails Deep Dive) -->
+      <div class="arch-pane" id="tab-guardrails">
+        <div style="font-size: 0.78rem; color: var(--text-muted);">
+          Why runtime guardrails are non-negotiable in production AI systems:
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+          
+          <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-sm); padding: 1rem; display: flex; flex-direction: column; gap: 0.6rem;">
+            <div style="font-family: var(--font-display); font-weight: 700; color: #fbbf24; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🛡️ 1. Input Guardrail</span>
+              <span class="flow-badge" style="color: #fbbf24;">Pre-LLM</span>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45;">
+              <b>The First Line of Defense:</b> Intercepts adversarial prompts before consuming tokens or invoking cloud APIs.
+            </div>
+            <div style="font-size: 0.76rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.4rem;">
+              <div>• <b>Injection Patterns:</b> <code>ignore previous</code>, <code>system prompt</code>, <code>jailbreak</code>, <code>DAN mode</code>, <code>override instructions</code>.</div>
+              <div>• <b>Domain Classifier:</b> Enforces topic relevance to Claude Code, terminal workflows, and AI pair-programming.</div>
+              <div>• <b>Cost Impact:</b> Blocks attacks in &lt; 5ms with $0 LLM invocation cost.</div>
+            </div>
+          </div>
+
+          <div style="background: rgba(244, 63, 94, 0.05); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: var(--radius-sm); padding: 1rem; display: flex; flex-direction: column; gap: 0.6rem;">
+            <div style="font-family: var(--font-display); font-weight: 700; color: #fb7185; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🎯 2. Output Guardrail</span>
+              <span class="flow-badge" style="color: #fb7185;">Post-LLM</span>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45;">
+              <b>Truth & Security Verification:</b> Validates what the LLM generated before letting the user see it.
+            </div>
+            <div style="font-size: 0.76rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.4rem;">
+              <div>• <b>Secret Leak Scanner:</b> Regex scanning for API keys (<code>sk-</code>, <code>AIza</code>), environment variables, and credential dumps.</div>
+              <div>• <b>Lexical Faithfulness:</b> Jaccard overlap between answer tokens and retrieved video transcript context (&ge; 0.15 threshold).</div>
+              <div>• <b>Refusal Bypass:</b> Legitimate "not found in course" refusals pass cleanly without penalization.</div>
+            </div>
+          </div>
+
+          <div style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-sm); padding: 1rem; display: flex; flex-direction: column; gap: 0.6rem;">
+            <div style="font-family: var(--font-display); font-weight: 700; color: #a5b4fc; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🧪 3. Automated Evaluations</span>
+              <span class="flow-badge" style="color: #a5b4fc;">CI / Pytest</span>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45;">
+              <b>Rigorous CI/CD Test Suite:</b> Tested and scored using Ragas-compatible evaluation methodology.
+            </div>
+            <div style="font-size: 0.76rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.4rem;">
+              <div>• <b>Context Precision:</b> Measures whether relevant video chunks rank at top positions.</div>
+              <div>• <b>Faithfulness:</b> Verifies answers are 100% derived from source cues.</div>
+              <div>• <b>Injection Defense:</b> 25 automated unit & integration tests passing in ~9.8s.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 4: Ingestion & Hybrid Search -->
+      <div class="arch-pane" id="tab-ingestion">
+        <div style="font-size: 0.78rem; color: var(--text-muted);">
+          How 9.2 hours of video become instant, zero-database serverless search:
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.85rem;">
+          
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.95rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">🎙️</div>
+            <div style="font-weight: 700; color: #ffffff; font-size: 0.85rem; margin-bottom: 0.3rem;">1. Whisper Transcription</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+              5 video sessions (~9.2 hours) transcribed with high-accuracy timestamps into raw VTT and JSON cue objects via <code>transcribe_all.py</code>.
+            </div>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.95rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">✂️</div>
+            <div style="font-weight: 700; color: #ffffff; font-size: 0.85rem; margin-bottom: 0.3rem;">2. Cue Boundary Chunking</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+              <code>chunker.py</code> groups contiguous sentences into 200-400 token semantic segments while strictly preserving start and end timestamps.
+            </div>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.95rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">🧬</div>
+            <div style="font-weight: 700; color: #ffffff; font-size: 0.85rem; margin-bottom: 0.3rem;">3. Vector Preindexing</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+              <code>preindexer.py</code> embeds all 691 chunks using Gemini 768-D vectors and compiles them into a single portable <code>preindexed_embeddings.json</code> file.
+            </div>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.95rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">⚡</div>
+            <div style="font-weight: 700; color: #ffffff; font-size: 0.85rem; margin-bottom: 0.3rem;">4. Serverless In-Memory Search</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+              Vercel loads the JSON into Python memory on cold start. Cosine similarity executes via pure math in ~15ms with <b>zero database costs or maintenance</b>.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="arch-modal-footer">
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.76rem; color: var(--text-dim);">
+          <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981;"></span>
+          <span>Deployed on Vercel Serverless • In-memory Vector Search • Zero Database Bottleneck</span>
+        </div>
+        <button onclick="closeArchModal()" class="arch-close-action-btn">Got it, Back to App</button>
+      </div>
+
+    </div>
   </div>
 
   <!-- Video Player & Course Catalog Modal -->
@@ -1639,13 +2397,38 @@
       if (iframe) iframe.src = "";
     }
 
+    /* Architecture Modal Handlers */
+    function openArchModal() {
+      document.getElementById("arch-modal").classList.add("active");
+    }
+
+    function closeArchModal() {
+      document.getElementById("arch-modal").classList.remove("active");
+    }
+
+    function switchArchTab(tabId) {
+      document.querySelectorAll(".arch-tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-arch-tab") === tabId);
+      });
+      document.querySelectorAll(".arch-pane").forEach(pane => {
+        pane.classList.toggle("active", pane.id === tabId);
+      });
+    }
+
     // Close on backdrop click and Escape key
     document.getElementById("video-modal").addEventListener("click", function(e) {
       if (e.target === this) closeModal();
     });
 
+    document.getElementById("arch-modal").addEventListener("click", function(e) {
+      if (e.target === this) closeArchModal();
+    });
+
     document.addEventListener("keydown", function(e) {
-      if (e.key === "Escape") closeModal();
+      if (e.key === "Escape") {
+        closeModal();
+        closeArchModal();
+      }
     });
 
     function escapeHtml(str) {
