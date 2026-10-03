@@ -1,7 +1,7 @@
-# Graph Report - video-rag-with-guardrails-evals  (2026-10-04)
+# Graph Report - video-rag-with-guardrails-evals  (2026-10-03)
 
 ## Corpus Check
-- 29 files · ~1,319,063 words
+- 29 files · ~1,308,296 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 6 file(s) not represented in the graph (top: (none) 5, .example 1)
 
@@ -9,11 +9,6 @@
 - 301 nodes · 488 edges · 14 communities (11 shown, 3 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 22 edges (avg confidence: 0.92)
 - Token cost: 0 input · 0 output
-
-## Graph Freshness
-- Built from commit: `a0f1c886`
-- Run `git rev-parse HEAD` and compare to check if the graph is stale.
-- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - OutputGuardrail

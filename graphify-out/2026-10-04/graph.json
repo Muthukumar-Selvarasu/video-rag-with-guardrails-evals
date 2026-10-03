@@ -3524,7 +3524,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "api/index.py",
-      "source_location": "L257",
+      "source_location": "L250",
       "weight": 1.0
     },
     {
@@ -3536,7 +3536,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "api/index.py",
-      "source_location": "L268",
+      "source_location": "L261",
       "weight": 1.0
     },
     {
@@ -9134,6 +9134,5 @@
       "weight": 0.8
     }
   ],
-  "hyperedges": [],
-  "built_at_commit": "a0f1c886350e26f4dd46f3d6d8e01a7e1dff4b24"
+  "hyperedges": []
 }
