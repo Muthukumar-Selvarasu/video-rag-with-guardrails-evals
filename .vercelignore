@@ -1,0 +1,17 @@
+.venv/
+env/
+venv/
+tests/
+data/videos/
+data/chroma_db/
+graphify-out/cache/
+.pytest_cache/
+.deepeval/
+.git/
+*.mp4
+*.mov
+*.wav
+*.mp3
+__pycache__/
+*.pyc
+.DS_Store

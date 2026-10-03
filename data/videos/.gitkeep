@@ -1,0 +1,2 @@
+# Place local course video files here (.mp4, .mov, etc.)
+# Large video files are ignored by git via .gitignore
