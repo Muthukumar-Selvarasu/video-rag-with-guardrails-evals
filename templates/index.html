@@ -1624,8 +1624,138 @@
       border-color: rgba(0, 0, 0, 0.08) !important;
     }
 
-    [data-theme="light"] #insp-segments-list [style*="color:#c7d2fe"] {
-      color: #4338ca !important;
+    /* Modal Video Player Sub-Controls & Action Buttons */
+    .modal-catalog-pill-btn {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #c7d2fe;
+      padding: 0.3rem 0.8rem;
+      border-radius: 9999px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .modal-catalog-pill-btn:hover {
+      background: rgba(99, 102, 241, 0.3);
+      color: #ffffff;
+      border-color: #818cf8;
+      transform: translateY(-1px);
+    }
+
+    [data-theme="light"] .modal-catalog-pill-btn {
+      background: rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.4);
+      color: #4338ca;
+      font-weight: 700;
+    }
+
+    [data-theme="light"] .modal-catalog-pill-btn:hover {
+      background: #4f46e5;
+      color: #ffffff;
+      border-color: #4338ca;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25);
+    }
+
+    .video-sync-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      background: var(--bg-card-alt);
+      padding: 0.65rem 0.95rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .modal-time-display {
+      font-family: var(--font-mono);
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #38bdf8;
+      letter-spacing: 0.04em;
+    }
+
+    [data-theme="light"] .modal-time-display {
+      color: #0284c7;
+    }
+
+    .modal-action-btn-primary {
+      background: rgba(99, 102, 241, 0.18);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+      padding: 0.5rem 1.05rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: var(--font-body);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-action-btn-primary:hover {
+      background: rgba(99, 102, 241, 0.35);
+      color: #ffffff;
+      border-color: #818cf8;
+      transform: translateY(-1px);
+    }
+
+    [data-theme="light"] .modal-action-btn-primary {
+      background: #4f46e5;
+      border-color: #4338ca;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+    }
+
+    [data-theme="light"] .modal-action-btn-primary:hover {
+      background: #4338ca;
+      border-color: #3730a3;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+    }
+
+    .modal-action-btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.5rem 1.05rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: var(--font-body);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .modal-action-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
+    [data-theme="light"] .modal-action-btn-secondary {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      color: #1e293b;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
+
+    [data-theme="light"] .modal-action-btn-secondary:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+      color: #0f172a;
     }
 
     @media (max-width: 1024px) {
@@ -2297,7 +2427,7 @@
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
           <div class="modal-title" id="modal-video-title">Claude Code Video Session</div>
-          <button id="modal-view-toggle-btn" onclick="toggleModalCatalog()" style="display: none; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.35); color: #c7d2fe; padding: 0.25rem 0.7rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+          <button id="modal-view-toggle-btn" class="modal-catalog-pill-btn" onclick="toggleModalCatalog()" style="display: none;">
             📚 All 5 Sessions
           </button>
         </div>
@@ -2316,13 +2446,13 @@
           </iframe>
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: rgba(255, 255, 255, 0.02); padding: 0.6rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid rgba(255, 255, 255, 0.05);">
-          <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <div class="video-sync-bar">
+          <div style="display: flex; align-items: center; gap: 0.65rem;">
             <span class="video-badge" id="modal-session-chip">SESSION 1</span>
-            <span style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; color: #38bdf8;" id="modal-time-display">00:00</span>
+            <span class="modal-time-display" id="modal-time-display">00:00</span>
           </div>
-          <div style="font-size: 0.75rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.4rem;">
-            <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
+          <div style="font-size: 0.76rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.45rem; font-weight: 500;">
+            <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></span>
             <span>YouTube Stream Synchronized</span>
           </div>
         </div>
@@ -2334,11 +2464,11 @@
           </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.25rem;">
-          <button onclick="openCourseCatalogModal()" style="background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.3); color: #c7d2fe; padding: 0.45rem 0.95rem; border-radius: var(--radius-sm); font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 0.4rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+          <button onclick="openCourseCatalogModal()" class="modal-action-btn-primary">
             <span>📚</span> Browse All 5 Sessions
           </button>
-          <button onclick="closeModal()" style="background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border-subtle); color: #fff; padding: 0.45rem 1rem; border-radius: var(--radius-sm); font-size: 0.8rem; cursor: pointer;">
+          <button onclick="closeModal()" class="modal-action-btn-secondary">
             Close Player
           </button>
         </div>
@@ -2346,14 +2476,14 @@
 
       <!-- VIEW B: Full Course Knowledge Base Sessions Catalog List -->
       <div id="modal-catalog-view" style="display: none; flex-direction: column; gap: 0.85rem;">
-        <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 0.6rem;">
+        <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.6rem;">
           Browse the complete 5-session curriculum (~9.2 hours). Select any session below to launch its video player at 00:00 or search indexed transcripts.
         </div>
         <div id="modal-catalog-list" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 520px; overflow-y: auto; padding-right: 4px;">
           <!-- Dynamically populated 5 session cards -->
         </div>
         <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
-          <button onclick="closeModal()" style="background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border-subtle); color: #fff; padding: 0.45rem 1rem; border-radius: var(--radius-sm); font-size: 0.8rem; cursor: pointer;">
+          <button onclick="closeModal()" class="modal-action-btn-secondary">
             Close
           </button>
         </div>
