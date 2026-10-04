@@ -7,3 +7,4 @@ deepeval>=0.20.0
 faster-whisper>=1.0.0
 google-adk>=0.1.0
 langchain-text-splitters>=0.0.1
+ruff>=0.4.0

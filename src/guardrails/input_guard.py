@@ -22,9 +22,20 @@ class InputGuardrail:
     DEFAULT_INJECTION_PATTERNS = [
         r"(?i)ignore\s+(all\s+)?(previous|prior)\s+instructions",
         r"(?i)system\s+prompt\s+override",
+        r"(?i)system\s+override",
         r"(?i)you\s+are\s+now\s+in\s+developer\s+mode",
         r"(?i)disregard\s+all\s+rules",
+        r"(?i)forget\s+all\s+rules",
         r"(?i)reveal\s+(your\s+)?(secret|internal|system)\s+prompt",
+        r"(?i)\b(dan|do\s+anything\s+now)\s+mode\b",
+        r"(?i)\bbypass\s+safety\s+filters\b",
+        r"(?i)\b(gemini_api_key|openai_api_key|api_key|admin\s+token)\b",
+        r"(?i)\brm\s+-rf\b",
+        r"(?i)\bformat\s+(the\s+hard\s+drive|c:)\b",
+        r"(?i)\b(illegal\s+firearms|explosive\s+devices|manufacture\s+bombs)\b",
+        r"(?i)<script\b",
+        r"(?i)\b(phishing\s+email|phishing\s+attack)\b",
+        r"(?i)\breveal\s+.*(passwords?|credit\s*cards?|database\s+connection)",
     ]
 
     # Off-topic domain patterns unrelated to course / video material
@@ -33,6 +44,7 @@ class InputGuardrail:
         r"(?i)\b(crypto\s+trading|buy\s+bitcoin|stock\s+prediction|forex)\b",
         r"(?i)\b(diagnose\s+my|medical\s+symptoms|prescription|dosage)\b",
         r"(?i)\b(write\s+an?\s+essay\s+on\s+world\s+war|write\s+a\s+poem\s+about\s+(flowers|cats))\b",
+        r"(?i)\b(world\s+cup|fifa|olympics|super\s+bowl|nfl|nba)\b",
     ]
 
     def __init__(

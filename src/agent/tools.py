@@ -13,7 +13,7 @@ def search_transcripts_structured(query: str, top_k: int = 4, session_filter: Op
     try:
         searcher = get_searcher()
         return searcher.search(query=query, top_k=top_k, session_filter=session_filter)
-    except Exception as exc:
+    except Exception:
         # Fallback to ChromaDB if available
         global _chroma_embedder
         try:

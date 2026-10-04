@@ -55,3 +55,7 @@ htmlcov/
 *.swo
 .DS_Store
 .vercel
+.ruff_cache/
+scratch/
+logs/*.jsonl
+!logs/.gitkeep

@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import re
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -18,10 +19,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, Field
 
+from src.agent.session import SessionManager, disambiguate_query
 from src.guardrails.input_guard import InputGuardrail
 from src.guardrails.output_guard import OutputGuardrail
 from src.guardrails.router import GuardrailRouter
 from src.ingestion.search import get_searcher
+from src.telemetry.logger import get_telemetry_logger
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s]: %(message)s")
 logger = logging.getLogger("video_rag_api")
@@ -40,7 +43,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Guardrails
+# Initialize Guardrails, Session Manager, and Telemetry Logger
 input_guard = InputGuardrail(
     course_keywords=[
         "claude", "code", "agent", "prompt", "context", "terminal", "cli",
@@ -51,11 +54,15 @@ input_guard = InputGuardrail(
 )
 output_guard = OutputGuardrail(min_grounding_score=0.15)
 guardrail_router = GuardrailRouter(input_guard=input_guard, output_guard=output_guard)
+session_manager = SessionManager()
+telemetry_logger = get_telemetry_logger()
 
 
 class ChatRequest(BaseModel):
     message: str = Field(..., description="User query or question")
-    session_id: Optional[str] = Field(None, description="Optional session filter (e.g. claude-code-session-1)")
+    session_id: Optional[str] = Field(None, description="Conversation session ID or session filter")
+    conversation_id: Optional[str] = Field(None, description="Explicit conversation session identifier")
+    session_filter: Optional[str] = Field(None, description="Transcript filter (e.g. claude-code-session-1)")
     top_k: Optional[int] = Field(4, description="Number of transcript chunks to retrieve")
 
 
@@ -216,15 +223,41 @@ async def search_endpoint(req: SearchRequest):
 
 @app.post("/api/chat")
 async def chat_endpoint(req: ChatRequest):
-    """Protected RAG query endpoint guarded by GuardrailRouter."""
+    """Protected RAG query endpoint guarded by GuardrailRouter, multi-turn session state, and telemetry."""
+    start_time = time.perf_counter()
     query = req.message.strip()
+
+    # Determine conversation session ID and transcript filter
+    conv_session_id = req.conversation_id or req.session_id or "default_session"
+    session_filter = req.session_filter
+    if not session_filter and req.session_id and req.session_id.startswith("claude-code-session-"):
+        session_filter = req.session_id
+        if not req.conversation_id:
+            conv_session_id = "default_session"
+
+    session_state = session_manager.get_or_create(conv_session_id)
 
     # Step 1: Input Guardrail Check
     input_result = input_guard.validate(query)
     if not input_result.passed:
+        total_duration_ms = (time.perf_counter() - start_time) * 1000.0
+        telemetry_logger.log_interaction(
+            session_id=conv_session_id,
+            query=query,
+            input_guard_passed=False,
+            retrieval_chunk_ids=[],
+            retrieval_latency_ms=0.0,
+            llm_latency_ms=0.0,
+            output_guard_passed=False,
+            grounding_score=0.0,
+            total_duration_ms=total_duration_ms,
+            metadata={"stage": "input_guardrail", "reason": input_result.reason},
+        )
         logger.warning(f"Input rejected by guardrail: {input_result.reason}")
         return {
             "success": False,
+            "session_id": conv_session_id,
+            "turn_count": len(session_state.messages),
             "error": input_result.reason,
             "response": f"Request blocked: {input_result.reason}",
             "stage": "input_guardrail",
@@ -246,30 +279,49 @@ async def chat_endpoint(req: ChatRequest):
             "sources": [],
         }
 
-    # Step 2: Semantic Transcript Retrieval
-    # Auto-detect session mention if not explicitly filtered
-    session_filter = req.session_id
+    # Step 2: Query Disambiguation & Semantic Transcript Retrieval
+    search_query = disambiguate_query(query, session_state.get_history()) if session_state.messages else query
     if not session_filter:
-        session_match = re.search(r"\bsession\s*([1-5])\b", query, re.IGNORECASE)
+        session_match = re.search(r"\bsession\s*([1-5])\b", search_query, re.IGNORECASE)
         if session_match:
             session_filter = f"claude-code-session-{session_match.group(1)}"
 
+    retrieval_start = time.perf_counter()
     searcher = get_searcher()
     retrieved_chunks = searcher.search(
-        query=query,
+        query=search_query,
         top_k=req.top_k or 5,
         session_filter=session_filter,
     )
-
+    retrieval_latency_ms = (time.perf_counter() - retrieval_start) * 1000.0
+    retrieval_chunk_ids = [c.get("id") for c in retrieved_chunks if c.get("id")]
     combined_context = " ".join([c.get("text", "") for c in retrieved_chunks])
 
     # Step 3: LLM Generation
+    llm_start = time.perf_counter()
     try:
-        raw_response = synthesize_rag_response(query=query, chunks=retrieved_chunks)
+        raw_response = synthesize_rag_response(query=search_query, chunks=retrieved_chunks)
+        llm_latency_ms = (time.perf_counter() - llm_start) * 1000.0
     except Exception as exc:
+        llm_latency_ms = (time.perf_counter() - llm_start) * 1000.0
+        total_duration_ms = (time.perf_counter() - start_time) * 1000.0
         logger.error(f"Response synthesis failed: {exc}", exc_info=True)
+        telemetry_logger.log_interaction(
+            session_id=conv_session_id,
+            query=query,
+            input_guard_passed=True,
+            retrieval_chunk_ids=retrieval_chunk_ids,
+            retrieval_latency_ms=retrieval_latency_ms,
+            llm_latency_ms=llm_latency_ms,
+            output_guard_passed=False,
+            grounding_score=0.0,
+            total_duration_ms=total_duration_ms,
+            metadata={"stage": "agent_execution", "error": str(exc)},
+        )
         return {
             "success": False,
+            "session_id": conv_session_id,
+            "turn_count": len(session_state.messages),
             "error": str(exc),
             "response": "An error occurred while generating response.",
             "stage": "agent_execution",
@@ -289,10 +341,27 @@ async def chat_endpoint(req: ChatRequest):
 
     # Step 4: Output Guardrail Check (Credential Leaks & Context Grounding)
     output_result = output_guard.validate(raw_response, context=combined_context)
+    grounding_score = output_result.score if output_result.score is not None else 0.0
+    total_duration_ms = (time.perf_counter() - start_time) * 1000.0
+
     if not output_result.passed:
         logger.warning(f"Output rejected by guardrail: {output_result.reason}")
+        telemetry_logger.log_interaction(
+            session_id=conv_session_id,
+            query=query,
+            input_guard_passed=True,
+            retrieval_chunk_ids=retrieval_chunk_ids,
+            retrieval_latency_ms=retrieval_latency_ms,
+            llm_latency_ms=llm_latency_ms,
+            output_guard_passed=False,
+            grounding_score=grounding_score,
+            total_duration_ms=total_duration_ms,
+            metadata={"stage": "output_guardrail", "reason": output_result.reason},
+        )
         return {
             "success": False,
+            "session_id": conv_session_id,
+            "turn_count": len(session_state.messages),
             "error": output_result.reason,
             "response": "Generated response failed security or quality validation.",
             "stage": "output_guardrail",
@@ -359,8 +428,28 @@ async def chat_endpoint(req: ChatRequest):
         eval_status = "PASSED" if eval_overall_passed else "EVAL FAILED"
         eval_message = "Passed context precision and faithfulness benchmarks." if eval_overall_passed else "Failed retrieval precision or transcript grounding benchmark."
 
+    # Record telemetry event
+    telemetry_logger.log_interaction(
+        session_id=conv_session_id,
+        query=query,
+        input_guard_passed=True,
+        retrieval_chunk_ids=retrieval_chunk_ids,
+        retrieval_latency_ms=retrieval_latency_ms,
+        llm_latency_ms=llm_latency_ms,
+        output_guard_passed=True,
+        grounding_score=eval_faithfulness_score,
+        total_duration_ms=total_duration_ms,
+        metadata={"stage": "completed", "disambiguated_query": search_query},
+    )
+
+    # Record conversation history turns in session state
+    session_state.add_turn(role="user", content=query)
+    session_state.add_turn(role="assistant", content=resp_text, retrieved_chunks=retrieved_chunks)
+
     return {
         "success": True,
+        "session_id": conv_session_id,
+        "turn_count": len(session_state.messages),
         "response": resp_text,
         "stage": "completed",
         "guardrails": {

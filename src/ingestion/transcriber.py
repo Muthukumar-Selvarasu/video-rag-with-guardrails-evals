@@ -61,7 +61,7 @@ def parse_srt(content: str) -> List[Dict[str, Any]]:
 
     blocks = re.split(r"\n\s*\n", content.strip())
     for block in blocks:
-        lines = [l.strip() for l in block.strip().splitlines() if l.strip()]
+        lines = [ln.strip() for ln in block.strip().splitlines() if ln.strip()]
         for idx, line in enumerate(lines):
             match = srt_pattern.search(line)
             if match:

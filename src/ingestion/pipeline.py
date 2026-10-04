@@ -33,7 +33,7 @@ def ingest_file(
 
     # Step 1: Load or Transcribe
     if suffix in (".mp4", ".mov", ".m4v", ".webm", ".mp3", ".wav"):
-        print(f"[*] Transcribing media file using Gemini API...")
+        print("[*] Transcribing media file using Gemini API...")
         segments = transcribe_media_with_gemini(str(path))
         # Save transcript to data/raw_transcripts for caching
         out_transcript = Path("data/raw_transcripts") / f"{vid_id}.json"
@@ -96,9 +96,9 @@ def ingest_all(
             if not cached_transcript.exists():
                 total_chunks += ingest_file(str(file))
 
-    print(f"\n==========================================")
+    print("\n==========================================")
     print(f"[✓] Pipeline completed. Total chunks processed: {total_chunks}")
-    print(f"==========================================")
+    print("==========================================")
 
 
 if __name__ == "__main__":

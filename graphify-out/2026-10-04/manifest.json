@@ -138,9 +138,9 @@
     "semantic_hash": ""
   },
   "api/index.py": {
-    "mtime": 1791035186.8561306,
-    "seen": 1791035224.204426,
-    "ast_hash": "f36b91c5b0ca08df93f69b89a0ffae16",
+    "mtime": 1791042922.8188102,
+    "seen": 1791050769.791256,
+    "ast_hash": "939cd54dc2625300cde1592684e6df43",
     "semantic_hash": ""
   },
   "src/ingestion/preindexer.py": {
@@ -174,9 +174,9 @@
     "semantic_hash": ""
   },
   "api/templates/index.html": {
-    "mtime": 1791039998.1387527,
-    "seen": 1791040081.108195,
-    "ast_hash": "99b5b34886b10120f2da114b18e93548",
+    "mtime": 1791050759.9328618,
+    "seen": 1791050769.7916632,
+    "ast_hash": "8233f9b88a1593cefa7a931b5efdbb05",
     "semantic_hash": ""
   },
   "requirements-dev.txt": {
@@ -186,9 +186,15 @@
     "semantic_hash": ""
   },
   "templates/index.html": {
-    "mtime": 1791040003.4127035,
-    "seen": 1791040081.108236,
-    "ast_hash": "99b5b34886b10120f2da114b18e93548",
+    "mtime": 1791050731.5626037,
+    "seen": 1791050769.791698,
+    "ast_hash": "8233f9b88a1593cefa7a931b5efdbb05",
+    "semantic_hash": ""
+  },
+  "src/ingestion/hydrate.py": {
+    "mtime": 1791085628.9530818,
+    "seen": 1791085703.046004,
+    "ast_hash": "213cf2f887ec69c1562b880fca4a08e5",
     "semantic_hash": ""
   }
 }

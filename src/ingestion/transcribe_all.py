@@ -31,7 +31,7 @@ def transcribe_videos(
         return
 
     print(f"\n{'='*60}")
-    print(f"🎬 Course Video Local Transcription Pipeline")
+    print("🎬 Course Video Local Transcription Pipeline")
     print(f"Model: {model_size} | Total videos: {len(video_files)}")
     print(f"{'='*60}\n")
 
@@ -45,7 +45,7 @@ def transcribe_videos(
 
         if target_json.exists() and not force:
             print(f"  ↪ [SKIPPED] Transcript already exists at: {target_json}")
-            print(f"     (Pass --force to overwrite)")
+            print("     (Pass --force to overwrite)")
             continue
 
         vid_start = time.time()

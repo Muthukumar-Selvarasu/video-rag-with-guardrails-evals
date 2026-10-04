@@ -37,7 +37,10 @@ except ImportError:
 
 
 from src.agent.tools import search_transcripts
+from src.agent.session import SessionManager, disambiguate_query
 from src.guardrails.router import GuardrailRouter
+
+_DEFAULT_SESSION_MANAGER = SessionManager()
 
 
 def create_video_rag_agent(
@@ -77,25 +80,53 @@ def create_video_rag_agent(
     return agent
 
 
-def run_pipeline(query: str, agent: Optional[LlmAgent] = None) -> Dict[str, Any]:
-    """Execute the full query pipeline protected by runtime guardrails.
+def run_pipeline(
+    query: str,
+    agent: Optional[LlmAgent] = None,
+    session_id: Optional[str] = None,
+    session_manager: Optional[SessionManager] = None,
+) -> Dict[str, Any]:
+    """Execute the full query pipeline protected by runtime guardrails and multi-turn state.
 
     Args:
         query: User input query.
         agent: Optional pre-configured LlmAgent instance.
+        session_id: Optional conversation session identifier for multi-turn dialogue.
+        session_manager: Optional SessionManager registry.
 
     Returns:
         Structured result dictionary with execution status and response text.
     """
     active_agent = agent or create_video_rag_agent()
     router = GuardrailRouter()
+    mgr = session_manager or _DEFAULT_SESSION_MANAGER
+
+    session_state = mgr.get_or_create(session_id) if session_id else None
+    effective_query = query
+    if session_state and session_state.messages:
+        effective_query = disambiguate_query(query, session_state.get_history())
 
     def agent_executor(prompt: str) -> str:
         if hasattr(active_agent, "run"):
-            return active_agent.run(prompt)
-        return str(active_agent)
+            try:
+                return active_agent.run(prompt)
+            except TypeError:
+                pass
+        from src.agent.tools import search_transcripts_structured
+        from api.index import synthesize_rag_response
+        chunks = search_transcripts_structured(query=prompt, top_k=4)
+        return synthesize_rag_response(query=prompt, chunks=chunks)
 
-    return router.process(query=query, agent_executor=agent_executor)
+    result = router.process(query=effective_query, agent_executor=agent_executor)
+
+    if session_state:
+        session_state.add_turn(role="user", content=query)
+        if result.get("success"):
+            session_state.add_turn(role="assistant", content=result.get("response", ""))
+        result["session_id"] = session_id
+        result["turn_count"] = len(session_state.messages)
+
+    return result
 
 
 if __name__ == "__main__":
