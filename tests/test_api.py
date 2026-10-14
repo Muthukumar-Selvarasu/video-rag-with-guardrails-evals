@@ -133,3 +133,36 @@ def test_api_chat_scope_guidance():
     assert len(data["sources"]) == 0
 
 
+def test_api_chat_production_audits_module_query():
+    response = client.post(
+        "/api/chat",
+        json={"message": "tell me about production audits and testing", "conversation_id": "test_audits_ci"},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["success"] is True
+    assert data["stage"] == "completed"
+    assert data["guardrails"]["input"]["passed"] is True
+    assert data["guardrails"]["output"]["passed"] is True
+    assert data["evals"]["status"] == "PASSED"
+    assert len(data["sources"]) > 0
+    assert any("claude-code-session-4" in s["video_id"] for s in data["sources"])
+
+
+def test_api_chat_context_engineering_module_query():
+    response = client.post(
+        "/api/chat",
+        json={"message": "tell me about context engineering", "conversation_id": "test_ctx_ci"},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["success"] is True
+    assert data["stage"] == "completed"
+    assert data["guardrails"]["input"]["passed"] is True
+    assert data["guardrails"]["output"]["passed"] is True
+    assert data["evals"]["status"] == "PASSED"
+    assert len(data["sources"]) > 0
+    assert any("claude-code-session-2" in s["video_id"] for s in data["sources"])
+
+
+

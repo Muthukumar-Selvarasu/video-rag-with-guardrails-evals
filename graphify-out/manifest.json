@@ -138,9 +138,9 @@
     "semantic_hash": ""
   },
   "api/index.py": {
-    "mtime": 1791943740.5501301,
-    "seen": 1791946132.605417,
-    "ast_hash": "780f0e72e356857691749b191ce2df96",
+    "mtime": 1791947117.3220954,
+    "seen": 1791947266.758228,
+    "ast_hash": "38655196a10563df23d55c4ff691c5b0",
     "semantic_hash": ""
   },
   "src/ingestion/preindexer.py": {
@@ -156,9 +156,9 @@
     "semantic_hash": ""
   },
   "tests/test_api.py": {
-    "mtime": 1791943884.9273894,
-    "seen": 1791946132.60597,
-    "ast_hash": "788dfad35dee0463f9a59f311a7098d5",
+    "mtime": 1791947211.3383296,
+    "seen": 1791947266.7587898,
+    "ast_hash": "d83d930a94d7fac003a908f72869a586",
     "semantic_hash": ""
   },
   "vercel.json": {

@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "src/guardrails/input_guard.py": {
-    "mtime": 1791087754.3400946,
-    "seen": 1791087967.38219,
-    "ast_hash": "8d2b3f0a73006ddae767486b1a0d3eb3",
+    "mtime": 1791944786.2950022,
+    "seen": 1791946132.605626,
+    "ast_hash": "23c5e583d6af6e0e4c6cb802d1f47795",
     "semantic_hash": ""
   },
   "src/guardrails/output_guard.py": {
@@ -138,9 +138,9 @@
     "semantic_hash": ""
   },
   "api/index.py": {
-    "mtime": 1791087214.1855469,
-    "seen": 1791087967.3821208,
-    "ast_hash": "d5f59e175c57350930e93793770f45bf",
+    "mtime": 1791943740.5501301,
+    "seen": 1791946132.605417,
+    "ast_hash": "780f0e72e356857691749b191ce2df96",
     "semantic_hash": ""
   },
   "src/ingestion/preindexer.py": {
@@ -156,9 +156,9 @@
     "semantic_hash": ""
   },
   "tests/test_api.py": {
-    "mtime": 1791035205.8570569,
-    "seen": 1791035224.204748,
-    "ast_hash": "12d260cf1c551d654beb9fa85976d762",
+    "mtime": 1791943884.9273894,
+    "seen": 1791946132.60597,
+    "ast_hash": "788dfad35dee0463f9a59f311a7098d5",
     "semantic_hash": ""
   },
   "vercel.json": {
@@ -174,9 +174,9 @@
     "semantic_hash": ""
   },
   "api/templates/index.html": {
-    "mtime": 1791050759.9328618,
-    "seen": 1791050769.7916632,
-    "ast_hash": "8233f9b88a1593cefa7a931b5efdbb05",
+    "mtime": 1791944981.2460246,
+    "seen": 1791946132.606229,
+    "ast_hash": "ebe3768e91308f5c4cd10d6296cee06c",
     "semantic_hash": ""
   },
   "requirements-dev.txt": {
@@ -186,9 +186,9 @@
     "semantic_hash": ""
   },
   "templates/index.html": {
-    "mtime": 1791050731.5626037,
-    "seen": 1791050769.791698,
-    "ast_hash": "8233f9b88a1593cefa7a931b5efdbb05",
+    "mtime": 1791944954.4073596,
+    "seen": 1791946132.6063108,
+    "ast_hash": "ebe3768e91308f5c4cd10d6296cee06c",
     "semantic_hash": ""
   },
   "src/ingestion/hydrate.py": {
@@ -207,18 +207,6 @@
     "mtime": 1791087953.2255738,
     "seen": 1791087967.3821251,
     "ast_hash": "9abbf204c8acf3560cc9c9c71c6663a6",
-    "semantic_hash": ""
-  },
-  "scratch/build_calibrated_golden_dataset.py": {
-    "mtime": 1791087763.0508587,
-    "seen": 1791087967.3821251,
-    "ast_hash": "9514a649c15139b5b5b0208f0e7b1e73",
-    "semantic_hash": ""
-  },
-  "scratch/build_golden_dataset.py": {
-    "mtime": 1791087062.922936,
-    "seen": 1791087967.382126,
-    "ast_hash": "04a18e0cfc82133627f1ba257e367e1e",
     "semantic_hash": ""
   },
   "src/agent/cli.py": {
