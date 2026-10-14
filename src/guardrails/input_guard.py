@@ -29,13 +29,14 @@ class InputGuardrail:
         r"(?i)reveal\s+(your\s+)?(secret|internal|system)\s+prompt",
         r"(?i)\b(dan|do\s+anything\s+now)\s+mode\b",
         r"(?i)\bbypass\s+safety\s+filters\b",
-        r"(?i)\b(gemini_api_key|openai_api_key|api_key|admin\s+token)\b",
+        r"(?i)\b(gemini[_-]?api[_-]?key|openai[_-]?api[_-]?key|admin\s+token|secret[_-]?key|bearer\s+token)\b",
         r"(?i)\brm\s+-rf\b",
         r"(?i)\bformat\s+(the\s+hard\s+drive|c:)\b",
         r"(?i)\b(illegal\s+firearms|explosive\s+devices|manufacture\s+bombs)\b",
         r"(?i)<script\b",
         r"(?i)\b(phishing\s+email|phishing\s+attack)\b",
-        r"(?i)\breveal\s+.*(passwords?|credit\s*cards?|database\s+connection)",
+        r"(?i)\b(reveal|tell\s+me|show\s+me|what\s+is|give\s+me|output|print|display|leak)\b.*(api[ _-]?keys?|passwords?|credentials?|tokens?|secrets?|credit\s*cards?|env(ironment)?\s*vars?|database\s+connection)",
+        r"(?i)\b(api[ _-]?keys?|credentials?|env(ironment)?\s*vars?)\s+(used|stored|configured)\s+(here|in\s+this|by\s+you)\b",
     ]
 
     # Off-topic domain patterns unrelated to course / video material

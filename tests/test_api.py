@@ -86,3 +86,50 @@ def test_api_chat_no_info_suppresses_sources():
         assert len(data["sources"]) == 0
         assert data["guardrails"]["output"]["grounding_score"] == 0.0
 
+
+def test_api_chat_greeting():
+    response = client.post(
+        "/api/chat",
+        json={"message": "hey there how are you"},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["success"] is True
+    assert data["stage"] == "completed"
+    assert data["guardrails"]["input"]["passed"] is True
+    assert data["guardrails"]["output"]["passed"] is True
+    assert data["evals"]["status"] == "PASSED"
+    assert "Hello!" in data["response"]
+    assert len(data["sources"]) == 0
+
+
+def test_api_chat_project_overview():
+    response = client.post(
+        "/api/chat",
+        json={"message": "what is project for"},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["success"] is True
+    assert data["stage"] == "completed"
+    assert data["evals"]["status"] == "PASSED"
+    assert "Video RAG" in data["response"]
+    assert "5 complete Claude Code lecture sessions" in data["response"]
+    assert len(data["sources"]) == 0
+
+
+def test_api_chat_scope_guidance():
+    response = client.post(
+        "/api/chat",
+        json={"message": "what i can ask and what i can't ask"},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["success"] is True
+    assert data["stage"] == "completed"
+    assert data["evals"]["status"] == "PASSED"
+    assert "What You CAN Ask" in data["response"]
+    assert "What You CANNOT Ask" in data["response"]
+    assert len(data["sources"]) == 0
+
+
